@@ -1,0 +1,13 @@
+.formulario {
+    /* background-color: #000; */
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.centraliza{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

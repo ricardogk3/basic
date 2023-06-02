@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { userContext } from '../components/UserContext';
-import firebase from '../firebase';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { sendPasswordResetEmail } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword  } from 'firebase/auth';
+import { auth, db } from '../firebase';
+// import firebase from '../firebase';
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import './LocalCss.css';
@@ -28,6 +28,8 @@ export default function Login() {
         senha: '',
         msg: ''
     })
+    
+    // const auth = useAuth();
 
     const handleInputChange = (name, value) => {
         setState({
@@ -37,7 +39,7 @@ export default function Login() {
 
     useEffect(
         () => {
-            const auth = firebase.auth;
+            // const auth = firebase.auth;
             const unsubscribed = auth.onAuthStateChanged(
                 user => {
                     if (user) {
@@ -60,10 +62,10 @@ export default function Login() {
     )
 
     const login = async () => {
-        const auth = firebase.auth;
+        // const auth = firebase.auth;
         const { email, senha } = state;
         try {
-            const resposta = await auth.signInWithEmailAndPassword(email, senha);
+            await signInWithEmailAndPassword(auth, email, senha);
         } catch (error) {
             setState({ ...state, msg: 'Email ou senha inválidos' });
         }
@@ -72,7 +74,7 @@ export default function Login() {
 
     const cadastrar = async () => {
         setLoading(true);
-        const auth = firebase.auth;
+        // const auth = firebase.auth;
         const { email, senha } = state;
 
 
@@ -82,16 +84,14 @@ export default function Login() {
                 const rep1 = await sendPasswordResetEmail(auth, email);
                 const user = res.user;
                 const chave = user.uid;
-                console.log(chave)
 
-                firebase.db.collection('users').doc(user.uid).set({
+                await db.collection('users').doc(user.uid).set({
                     email: user.email
-                })
+                  });         
 
                 setState({ ...state, msg: "Verifique sua conta de email." })
                 setNewUser(false);
             } catch (err) {
-                console.error(err);
                 alert(err.message);
                 setState({ ...state, msg: "Não foi possível cadastrar o usuário." })
             }

@@ -1,32 +1,4 @@
-// const initialState = [];
-
-// const reducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case 'FETCH_TODOS':
-//       console.log("aquii")
-//       return action.payload;
-
-//     case 'ADD_TODO':
-//       return [...state, action.payload];
-
-//     case 'UPDATE_TODO':
-//       return state.map(todo =>
-//         todo.id === action.payload.id ? { ...todo, title: action.payload.title } : todo
-//       );
-
-//     case 'DELETE_TODO':
-//       return state.filter(todo => todo.id !== action.payload);
-
-//     default:
-//       return state;
-//   }
-// };
-
-
-// export default reducer;
-
-
-import { ADD_BOOKS, DELETE_ALL, GET_BOOKS } from "./action";
+import { ADD_BOOKS, DELETE_ALL, DELETE_BOOK, GET_BOOKS, UPDATE_BOOK } from "./action";
 
 const initialState=[];
 
@@ -41,6 +13,21 @@ const reducer=(state=initialState, action)=>{
         case DELETE_ALL:
             return [];
 
+        case DELETE_BOOK:
+            const filteredBooks = state.filter((book)=>book.id!==action.payload);
+            return filteredBooks;
+
+        case UPDATE_BOOK:
+            const updatedBooks=[];
+            const data = action.payload;
+            state.map((book)=>{
+                if(book.id===data.id){
+                    book = data
+                }
+                updatedBooks.push(book);
+            });
+            return updatedBooks;
+            
         default:
             return state;
     }

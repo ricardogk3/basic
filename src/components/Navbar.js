@@ -17,7 +17,6 @@ const Navbar = () => {
   const showSidebar = () => setSidebar(!sidebar);
   const { logado, deslogado, user } = useContext(userContext);
   // console.log(user.uid)
-  // console.log(UserData().adm)
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
