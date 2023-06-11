@@ -1,156 +1,162 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export const ADD_BOOKS = 'ADD_BOOKS';
+// Actions Types
 export const GET_BOOKS = 'GET_BOOKS';
-export const DELETE_ALL = 'DELETE_ALL';
-export const DELETE_BOOK = 'DELETE_BOOK';
+export const ADD_BOOK = 'ADD_BOOK';
 export const UPDATE_BOOK = 'UPDATE_BOOK';
-
-export const postBook = (newBook, colecaoFirebase) => async (dispatch) => {
-  const docRef = await addDoc(collection(db, colecaoFirebase), newBook);
-  const newBookWithId = {
-    ...newBook,
-    id: docRef.id,
-  };
-  dispatch({
-    type: ADD_BOOKS,
-    payload: newBookWithId
-  })
-}
-
-// export const postBook = (newBook, colecaoFirebase, subcolecaoFirebase) => async (dispatch) => {
-//     const novaColecaoRef = collection(db, colecaoFirebase);
-//     const novaSubcolecaoRef = collection(novaColecaoRef.doc().path, subcolecaoFirebase);
-
-//     await addDoc(novaSubcolecaoRef, newBook);
-
-//     dispatch({
-//       type: ADD_BOOKS,
-//       payload: newBook,
-//     });
-//   };
+export const DELETE_BOOK = 'DELETE_BOOK';
+export const ADD_SUBCOLLECTION = 'ADD_SUBCOLLECTION';
+export const UPDATE_SUBCOLLECTION = 'UPDATE_SUBCOLLECTION';
+export const DELETE_SUBCOLLECTION = 'DELETE_SUBCOLLECTION';
+export const GET_SUBCOLLECTION = 'GET_SUBCOLLECTION';
 
 
-// export const getBooks=(collectionF)=>async(dispatch)=>{
-//     const q = query(collection(db, collectionF));
-//     const books = await getDocs(q);
-//     if(books.docs.length > 0){
-//         const booksArray = [];
-//         for(var snap of books.docs){
-//             const data = snap.data();
-//             booksArray.push(data);
-//         }
-//         dispatch({
-//             type: GET_BOOKS,
-//             payload: booksArray
-//         })
-//     }
-// }
-
-export const getBooks = (collectionF, subcolecaoFirebase) => async (dispatch) => {
-  subcolecaoFirebase = 'subcolecao'
+export const getBooks = (collectionF) => async (dispatch) => {
   const q = query(collection(db, collectionF));
   const books = await getDocs(q);
-
   if (books.docs.length > 0) {
     const booksArray = [];
-
     for (var snap of books.docs) {
       const data = snap.data();
-
-      // Acessar a subcoleção desejada
-      const subcolecaoRef = collection(snap.ref, subcolecaoFirebase);
-      const subcolecaoDocs = await getDocs(subcolecaoRef);
-
       const bookData = {
         id: snap.id, // Adicionar o ID do documento
         ...data,
-        subcolecao: subcolecaoDocs.docs.map((doc) => doc.data()),
       };
-
       booksArray.push(bookData);
     }
-
     dispatch({
       type: GET_BOOKS,
-      payload: booksArray,
+      payload: booksArray
+    })
+  }
+  return true
+}
+
+
+export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) => async (dispatch) => {
+  const originalDocRef = doc(db, collectionF, originalId);
+
+  const subcolecaoRef = collection(originalDocRef, subcolecaoFirebase);
+  const subcolecaoDocs = await getDocs(subcolecaoRef);
+
+  if (subcolecaoDocs.docs.length > 0) {
+    const subcolecaoArray = subcolecaoDocs.docs.map((doc) => {
+      const data = doc.data();
+      return { id: doc.id, originalId, ...data }; // Adiciona o ID da coleção aos dados da subcoleção
     });
+    const enviaIdSub = {[originalId]:subcolecaoArray}
+    dispatch({
+      type: GET_SUBCOLLECTION,
+      payload: enviaIdSub,
+    });
+  }
+  return true
+};
+
+
+export const addBook = (collectionF, bookData) => async (dispatch) => {
+  try {
+    const docRef = await addDoc(collection(db, collectionF), bookData);
+    const book = { id: docRef.id, ...bookData };
+
+    dispatch({
+      type: ADD_BOOK,
+      payload: book,
+    });
+  } catch (error) {
+    console.log('Error adding book:', error);
   }
 };
 
-export const deleteAll = () => async (dispatch) => {
-  const q = query(collection(db, 'Books'));
-  const books = await getDocs(q);
-  for (var snap of books.docs) {
-    await deleteDoc(doc(db, 'Books', snap.id));
-  }
-  dispatch({
-    type: DELETE_ALL
-  })
-}
+export const updateBook = (collectionF, editedBook) => async (dispatch) => {
+  try {
+    const bookRef = doc(db, collectionF, editedBook.id);
+    await updateDoc(bookRef, editedBook);
 
-export const deleteBook = (id) => async (dispatch) => {
-  const q = query(collection(db, 'Books'));
-  const books = await getDocs(q);
-  for (var snap of books.docs) {
-    // const data = snap.data();
-    const documentId = snap.id;
-    if(documentId === id){
-        await deleteDoc(doc(db, 'Books', snap.id))
-    }
+    dispatch({
+      type: UPDATE_BOOK,
+      payload: editedBook,
+    });
+  } catch (error) {
+    console.log('Error updating book:', error);
   }
-  dispatch({
+};
+
+export const deleteBook = (collectionF, id) => async (dispatch) => {
+  console.log(collectionF, id)
+  try {
+    const bookRef = doc(db, collectionF, id);
+    await deleteDoc(bookRef);
+
+    dispatch({
       type: DELETE_BOOK,
-      payload: id
-  })
-
-}
-
-export const updateBook = (editedBook, collectionF) => async (dispatch) => {
-  const q = query(collection(db, collectionF));
-  const books = await getDocs(q);
-  for (var snap of books.docs) {
-    // const data = snap.data();
-    const documentId = snap.id;
-    if (documentId === editedBook.id) {
-      const bookRef = doc(db, collectionF, snap.id);
-      await updateDoc(bookRef, editedBook)
-    }
+      payload: id,
+    });
+  } catch (error) {
+    console.log('Error deleting book:', error);
   }
-  dispatch({
-    type: UPDATE_BOOK,
-    payload: editedBook
-  })
-}
+};
+
+export const addSubcollection = (collectionF, originalId, subcolecaoFirebase, subcollectionData) => async (
+  dispatch
+) => {
+  try {
+    const bookRef = doc(db, collectionF, originalId);
+    const subcollectionRef = collection(bookRef, subcolecaoFirebase); // substitua 'subcolecao' pelo nome da sua subcoleção
+    const docRef = await addDoc(subcollectionRef, subcollectionData);
+    const subcollection = { id: docRef.id, ...subcollectionData };
+    const enviaIdSub = { [originalId]: subcollection };
+// payload: { id, subcollection },
+dispatch({
+  type: ADD_SUBCOLLECTION,
+        payload: enviaIdSub,
+    });
+  } catch (error) {
+    console.log('Error adding subcollection:', error);
+  }
+};
 
 
-// export const updateBook = (editedBook, collectionF, subcolecaoFirebase) => async (dispatch) => {
-//   const q = query(collection(db, collectionF));
-//   const books = await getDocs(q);
+export const updateSubcollection = (
+  collectionF,
+  originalId,
+  subcolecaoFirebase,
+  subcollectionData
+) => async (dispatch) => {
+  try {
+    const bookRef = doc(db, collectionF, originalId);
+    const subcollectionRef = doc(bookRef, subcolecaoFirebase, subcollectionData.id); // substitua 'subcolecao' pelo nome da sua subcoleção
+    const id = subcollectionData.id;
+    await updateDoc(subcollectionRef, subcollectionData);
 
-//   for (var snap of books.docs) {
-//     const data = snap.data();
+    dispatch({
+      type: UPDATE_SUBCOLLECTION,
+      payload: { originalId, id, ...subcollectionData },
+    });
+  } catch (error) {
+    console.log('Error updating subcollection:', error);
+  }
+};
 
-//     if (data.isbn === editedBook.previousIsbn) {
-//       const bookRef = doc(db, collectionF, snap.id);
-//       const subcolecaoRef = collection(bookRef.path, subcolecaoFirebase);
 
-//       await updateDoc(bookRef, {
-//         isbn: editedBook.isbn,
-//         author: editedBook.author,
-//         title: editedBook.title,
-//       });
+export const deleteSubcollection = (
+  collectionF,
+  originalId,
+  subcolecaoFirebase,
+  subcollectionId
+) => async (dispatch) => {
+  try {
+    const bookRef = doc(db, collectionF, originalId);
+    const subcollectionRef = doc(bookRef, subcolecaoFirebase, subcollectionId);
+    await deleteDoc(subcollectionRef);
 
-//       // Adicionar um documento à subcoleção
-//       await addDoc(subcolecaoRef, {
-//         // Dados da subcoleção
-//       });
-//     }
-//   }
+    dispatch({
+      type: DELETE_SUBCOLLECTION,
+      payload: { originalId, subcollectionId },
+    });
+  } catch (error) {
+    console.log('Error deleting subcollection:', error);
+  }
+};
 
-//   dispatch({
-//     type: UPDATE_BOOK,
-//     payload: editedBook,
-//   });
-// };

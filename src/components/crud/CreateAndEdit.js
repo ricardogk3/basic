@@ -1,50 +1,62 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { postBook, updateBook } from '../../store/action';
+import { addBook, updateBook, addSubcollection, updateSubcollection } from '../../store/action';
 import { TextField } from '@material-ui/core';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import './style.css'
 
-export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited, inputs, user, colecaoFirebase }) => {
+export const CreateAndEdit = ({
+    editFormVisibility,
+    bookToBeEdited,
+    inputs,
+    user,
+    colecaoFirebase,
+    sub,
+    colecaoOriginal,
+    idOriginal,
+    setAddoredit,
+    setEditFormVisibility}) => {
 
     const dispatch = useDispatch();
+    const [valores, setValores] = useState(!!bookToBeEdited ? bookToBeEdited : {});
 
-    const [valores, setValores] = useState(!!bookToBeEdited? bookToBeEdited :  {} );
-
-    // normal add books submit event
     const handleSubmit = (e) => {
         e.preventDefault();
-        // let envia = valores
-        let envia = { ...valores, "uid": user }
-        dispatch(postBook(envia, colecaoFirebase));
-        // dispatch(postBook(envia, colecaoFirebase, 'subbooks'));
-    }
+        if (sub) {
+            const envia = { ...valores, uid: user };
+            dispatch(addSubcollection(colecaoOriginal, idOriginal, colecaoFirebase, envia));
+            setAddoredit(false)
+            setEditFormVisibility(false);
+        } else {
+            const envia = { ...valores, uid: user };
+            dispatch(addBook(colecaoFirebase, envia));
+        }
+    };
 
-    // edit form submit event
     const handleEditSubmit = (e) => {
         e.preventDefault();
-        let envia = { ...valores, "uid": user }
-        dispatch(updateBook(envia, colecaoFirebase));
-    }
+        if (sub) {
+            const envia = { ...valores, uid: user };
+            dispatch(updateSubcollection(colecaoOriginal, idOriginal, colecaoFirebase, envia));
+            setAddoredit(false)
+            setEditFormVisibility(false);
+        } else {
+            const envia = { ...valores, uid: user };
+            dispatch(updateBook(colecaoFirebase, envia));
+        }
+    };
 
     return (
         <>
             {editFormVisibility === false ? (
-                // normal add books form
                 <form className='form-group container' onSubmit={handleSubmit}>
                     <div className='column'>
                         {inputs.map((input, i) => {
                             if (input.tipo === 'text') {
                                 return (
-                                    <div className='formulario'  key={i}>
+                                    <div className='formulario' key={i}>
                                         <TextField id="outlined-basic" label={input.titulo} variant="outlined"
                                             onChange={(e) => setValores({ ...valores, [input.titulo]: e.target.value })}
                                         />
@@ -71,7 +83,6 @@ export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited
                                             id="date"
                                             label={input.titulo}
                                             type="date"
-                                            // value={selectedDate}
                                             onChange={(e) => setValores({ ...valores, [input.titulo]: e.target.value })}
                                             variant="outlined"
                                             InputLabelProps={{
@@ -83,14 +94,12 @@ export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited
                             }
                             if (input.tipo === 'select') {
                                 return (
-                                    <div className='formulario' key={i}>
+                                    <div className='formulario' style={{display:'flex',  flexDirection: "column", alignContent: 'center', justifyContent: 'center'}} key={i}>
                                         <InputLabel id="demo-simple-select-label">{input.titulo}</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            // value={age}
-                                            label={input.titulo}
-                                            // onChange={handleChange}
+                                                      labelId="demo-simple-select-standard-label"
+                                                      id="demo-simple-select-standard"
+                                            // label={input.titulo}
                                             onChange={(e) => setValores({ ...valores, [input.titulo]: e.target.value })}
                                         >
                                             {input.selecao.map((name, i) => (
@@ -109,11 +118,10 @@ export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited
                         </div>
                     </div>
                 </form>
+
             ) : (
-                <>
-                    {/* edit form when edit icon is clicked */}
-                    <form className='form-group container' onSubmit={handleEditSubmit}>
-                        <div className='row'>
+                <form className='form-group container' onSubmit={handleEditSubmit}>
+                    <div className='row'>
                         {inputs.map((input, i) => {
                             if (input.tipo === 'text') {
                                 return (
@@ -146,7 +154,6 @@ export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited
                                             id="date"
                                             label={input.titulo}
                                             type="date"
-                                            // value={selectedDate}
                                             value={valores[input.titulo]}
                                             onChange={(e) => setValores({ ...valores, [input.titulo]: e.target.value })}
                                             variant="outlined"
@@ -158,16 +165,15 @@ export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited
                                 )
                             }
                             if (input.tipo === 'select') {
+                                
                                 return (
-                                    <div className='formulario' key={i}>
+                                    <div className='formulario' style={{display:'flex',  flexDirection: "column", alignContent: 'center', justifyContent: 'center'}} key={i}>
                                         <InputLabel id="demo-simple-select-label">{input.titulo}</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            // value={age}
                                             value={valores[input.titulo]}
                                             label={input.titulo}
-                                            // onChange={handleChange}
                                             onChange={(e) => setValores({ ...valores, [input.titulo]: e.target.value })}
                                         >
                                             {input.selecao.map((name, i) => (
@@ -182,13 +188,12 @@ export const CreateAndEdit = ({ editFormVisibility, cancelUpdate, bookToBeEdited
                         })}
 
 
-                            <div className='col-3 button-div'>
-                                <Button variant="contained" type="submit" className='btn btn-warning btn-md submit-btn'>ATUALIZAR</Button>
-                            </div>
+                        <div className='formulario'>
+                            <Button variant="contained" type="submit" className='btn btn-success btn-md'>ATUALIZAR</Button>
                         </div>
-                    </form>
-                </>
+                    </div>
+                </form>
             )}
         </>
-    )
-}
+    );
+};

@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useFirebase } from 'react-redux-firebase'
+import React from 'react'
 import { useSelector } from 'react-redux';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import Read from './crud/Read';
@@ -91,13 +90,6 @@ export default function TodoList() {
         parametros={parametros}
         dados={null}
       />
-      {/* <CRUD parametros={parametros}/> */}
     </div>
-    // <ul>
-    //     pi
-    //   {users && users.map(user => (
-    //     <li key={user.id}>{user.name}</li>
-    //   ))}
-    // </ul>
   );
 }

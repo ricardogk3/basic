@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
-// import * as FaIcons from 'react-icons/fa';
+import React, { useState } from 'react';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
@@ -7,16 +6,14 @@ import './Navbar.css';
 import { IconContext } from 'react-icons';
 import logo1 from "../images/logo1.png";
 import UserView from './UserView';
-import { userContext } from './UserContext';
-import { UserData } from './UserData';
 
 // function Navbar() {
 const Navbar = () => {
   const [sidebar, setSidebar] = useState(false);
 
+  const [userAccount, setUserAccount] = useState({});
   const showSidebar = () => setSidebar(!sidebar);
-  const { logado, deslogado, user } = useContext(userContext);
-  // console.log(user.uid)
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
@@ -40,9 +37,9 @@ const Navbar = () => {
               </Link>
             </li>
             {SidebarData.map((item, index) => {
-              let userAdm = UserData().adm
-              // if(item.requireAdm === UserData().adm || UserData().adm){
-              // if(item.requireAdm == UserData().adm){
+              let userAdm = userAccount.adm
+              console.log(userAdm)
+
               if (item.requireAdm === userAdm || userAdm) {
                 return (
                   <li key={index} className={item.cName}>

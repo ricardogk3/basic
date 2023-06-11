@@ -1,31 +1,28 @@
 import { useSelector, useDispatch } from "react-redux";
 import { CreateAndEdit } from "./CreateAndEdit";
 import React, { useState, useEffect, useContext } from 'react';
-import { getBooks } from "../../store/action";
+import { getSubcollection } from "../../store/action";
 import Card from './Card'
 import Button from '@mui/material/Button';
 import { userContext } from '../../components/UserContext';
-import './style.css'
 import { Dots } from "react-activity";
 
-export default function Read(p) {
+export default function ReadSubColection(p) {
     const dispatch = useDispatch();
     const { user } = useContext(userContext);
-    const books = useSelector((state) => state.reducer.books);
+    const books = useSelector((state) => state.reducer.subcollection[p.dados]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(getBooks(p.parametros.colecaoFirebase))
+        dispatch(getSubcollection(p.colecaoOriginal, p.parametros.colecaoFirebase, p.dados))
         const fetchData = async () => {
-            const result = await dispatch(getBooks(p.parametros.colecaoFirebase));
+            const result = await dispatch(getSubcollection(p.colecaoOriginal, p.parametros.colecaoFirebase, p.dados));
             if (result) {
                 setLoading(false)
             }
         };
         fetchData();
     }, [dispatch])
-
-
 
     useEffect(() => {
         setEditFormVisibility(false);
@@ -53,8 +50,8 @@ export default function Read(p) {
 
     if (loading) {
         return (
-            <div className="loading">
-                <div style={{ alignContent: 'end', justifyContent: 'center', height: '10vh', width: '10vh' }}>
+            <div className="loading2">
+                <div style={{ alignContent: 'end', justifyContent: 'center'}}>
                     <Dots />
                 </div>
             </div>
@@ -74,7 +71,12 @@ export default function Read(p) {
                         inputs={p.parametros.input}
                         user={user.uid}
                         colecaoFirebase={p.parametros.colecaoFirebase}
-                        sub={false}
+                        sub={true}
+                        colecaoOriginal={p.colecaoOriginal}
+                        idOriginal={p.dados}
+                        setAddoredit={setAddoredit}
+                        setEditFormVisibility = {setEditFormVisibility}
+                        
                     />
                     <div className="centraliza">
                         <Button variant="contained"
@@ -90,8 +92,8 @@ export default function Read(p) {
                     <h1 className="heading">
                         {p.parametros.titulo}
                     </h1>
-                    {books.length > 0 ? (
-                        <div className="tabelafora">
+                    {books && books.length > 0 ? (
+                        <>
                             <div style={styles.c1}>
                                 <div style={styles.c2}>
                                     {p.parametros.input.map((v, i) => (
@@ -107,9 +109,9 @@ export default function Read(p) {
                                         editFormVisibility={editFormVisibility}
                                         editfunction={editfunction}
                                         inputs={p.parametros.input}
-                                        colecao={p.parametros.colecaoFirebase}
-                                        subcolecao={p.parametros.subcolecao}
-                                        sub={false}
+                                        subcolecaoName={p.parametros.colecaoFirebase}
+                                        colecaoOriginal={p.colecaoOriginal}
+                                        sub={true}
                                     />
                                 </div>
                             ))}
@@ -133,17 +135,7 @@ export default function Read(p) {
                                     <p style={styles.c4}></p>
                                 </div>
                             </div>
-                            {/* {books.length > 1 && (
-                                    <div className="centraliza">
-                                        <Button variant="contained"
-                                            className="meu-botao"
-                                            style={{ marginBotton: '4px' }}
-                                            onClick={() => dispatch(deleteAll(p.parametros.colecaoFirebase))}
-                                        >APAGAR TODOS</Button>
-                                    </div>
-                                )} */}
-                                
-                        </div>
+                        </>
                     )
                         : (
                             <div className="message-box">
@@ -157,38 +149,6 @@ export default function Read(p) {
                             onClick={() => setAddoredit(true)}
                         >ADICIONAR</Button>
                     </div>
-
-                    <div className="table-container">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Idade</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>João</td>
-                                    <td>25</td>
-                                    <td>joao@example.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Maria</td>
-                                    <td>30</td>
-                                    <td>maria@example.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Carlos</td>
-                                    <td>40</td>
-                                    <td>carlos@example.com</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
                 </div>
             }
         </>

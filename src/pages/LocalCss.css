@@ -4,7 +4,6 @@
     align-Items: center;
     justify-Content: center;
     height: 100vh;
-    
 }
 .BotaoAdd {
     display: flex;
@@ -106,5 +105,75 @@
     /* display:inline-flex; */
 }
 
-  
+.loading {
+    text-align: center;
+    display: flex;
+    align-Items: center;
+    justify-Content: center;
+    height: 80vh;
+}
 
+.loading2 {
+    text-align: center;
+    display: flex;
+    align-Items: center;
+    justify-Content: center;
+    height: 10vh;
+}
+
+.tabelafora{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    color: rgb(70, 70, 70); /* Cor cinza para o texto */
+}
+
+
+.table-container {
+  width: 100%;
+  /* padding: 20px; */
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd; /* Adicionar borda na parte inferior de cada célula */
+}
+
+.table th:first-child,
+.table td:first-child {
+  border-left: 1px solid #ddd; /* Adicionar borda na parte esquerda das células da primeira coluna */
+}
+
+.table th:last-child,
+.table td:last-child {
+  border-right: 1px solid #ddd; /* Adicionar borda na parte direita das células da última coluna */
+}
+
+.table thead th {
+  background-color: #f0f0f0;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tfoot td {
+  border-top: 1px solid #ddd; /* Adicionar borda na parte superior das células do rodapé */
+  font-weight: bold;
+}
+
+.table tbody tr:hover {
+    background-color: #eaeaea;
+  }
