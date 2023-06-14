@@ -94,14 +94,20 @@ export default function Read(p) {
                         <div className="tabelafora">
                             <div style={styles.c1}>
                                 <div style={styles.c2}>
+                                    {!!p.parametros.subcolecao ? <p style={styles.c4}></p>
+                                        : <></>}
                                     {p.parametros.input.map((v, i) => (
                                         <p style={styles.c3} key={i}>{v.titulo}</p>
                                     ))}
                                     <p style={styles.c4}></p>
+                                    <p style={styles.c4}></p>
                                 </div>
                             </div>
                             {books.map((book, i) => (
-                                <div key={i}>
+                                
+                                <div  
+                                className={`card-item ${i === books.length - 1 ? 'last-item' : ''}`}
+                                style={i % 2 === 0 ? { backgroundColor: '#fff' } : { backgroundColor: '#f0f0f0' }} key={i}>
                                     <Card
                                         book={book}
                                         editFormVisibility={editFormVisibility}
@@ -113,7 +119,7 @@ export default function Read(p) {
                                     />
                                 </div>
                             ))}
-                            <div style={styles.c1}>
+                            <div style={styles.c11}>
                                 <div style={styles.c2}>
                                     {p.parametros.input.map((v, i) => {
                                         if (v.tipo === 'number' && v.media) {
@@ -131,6 +137,7 @@ export default function Read(p) {
                                         }
                                     })}
                                     <p style={styles.c4}></p>
+                                    <p style={styles.c4}></p>
                                 </div>
                             </div>
                             {/* {books.length > 1 && (
@@ -142,7 +149,7 @@ export default function Read(p) {
                                         >APAGAR TODOS</Button>
                                     </div>
                                 )} */}
-                                
+
                         </div>
                     )
                         : (
@@ -158,37 +165,6 @@ export default function Read(p) {
                         >ADICIONAR</Button>
                     </div>
 
-                    <div className="table-container">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Idade</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>João</td>
-                                    <td>25</td>
-                                    <td>joao@example.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Maria</td>
-                                    <td>30</td>
-                                    <td>maria@example.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Carlos</td>
-                                    <td>40</td>
-                                    <td>carlos@example.com</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
                 </div>
             }
         </>
@@ -202,13 +178,25 @@ const styles = {
         justifyContent: 'center',
         background: '#eee',
         fontWeight: 'bold',
+        height: '30px',
+        border: '2px solid #ddd',
+    },
+    c11: {
+        display: "flex",
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#eee',
+        fontWeight: 'bold',
+        height: '30px',
+        border: '2px solid #ddd',
+        borderTop: "none"
     },
     c2: {
         display: "flex",
         width: '100%',
     },
     c3: {
-        flex: 3,
+        flex: 4,
         display: "flex",
         justifyContent: 'center',
     },

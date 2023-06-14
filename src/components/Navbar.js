@@ -11,7 +11,7 @@ import UserView from './UserView';
 const Navbar = () => {
   const [sidebar, setSidebar] = useState(false);
 
-  const [userAccount, setUserAccount] = useState({});
+  // const [userAccount, setUserAccount] = useState({});
   const showSidebar = () => setSidebar(!sidebar);
 
   return (
@@ -37,19 +37,19 @@ const Navbar = () => {
               </Link>
             </li>
             {SidebarData.map((item, index) => {
-              let userAdm = userAccount.adm
-              console.log(userAdm)
+              // let userAdm = userAccount.adm
+              // console.log(userAdm)
 
-              if (item.requireAdm === userAdm || userAdm) {
-                return (
-                  <li key={index} className={item.cName}>
-                    <Link to={item.path}>
-                      {item.icon}
-                      <span>{item.title}</span>
-                    </Link>
-                  </li>
-                );
-              }
+              // if (item.requireAdm === userAdm || userAdm) {
+              //   return (
+              //     <li key={index} className={item.cName}>
+              //       <Link to={item.path}>
+              //         {item.icon}
+              //         <span>{item.title}</span>
+              //       </Link>
+              //     </li>
+              //   );
+              // }
             })}
           </ul>
         </nav>

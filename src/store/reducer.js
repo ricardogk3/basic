@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
                 books: action.payload,
             };
         case GET_SUBCOLLECTION:
-            // const chave = Object.keys(action.payload)[0]
+            console.log(action.payload)
             state.subcollection[chave] = Object.values(action.payload)[0]
             return { ...state }
         case ADD_BOOK:
@@ -59,22 +59,6 @@ const reducer = (state = initialState, action) => {
                     ),
                 },
             };
-
-        // case DELETE_SUBCOLLECTION:
-        //     return {
-        //         ...state,
-        //         books: state.books.map((book) =>
-        //             book.id === action.payload.id
-        //                 ? {
-        //                     ...book,
-        //                     subcolecao: book.subcolecao.filter(
-        //                         (subcollection) =>
-        //                             subcollection.id !== action.payload.subcollectionId
-        //                     ),
-        //                 }
-        //                 : book
-        //         ),
-        //     };
         case DELETE_SUBCOLLECTION:
             return {
                 ...state,

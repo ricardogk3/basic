@@ -31,17 +31,6 @@ code {
   font-size: 28px;
 }
 
-.book{
-  width: 100%;
-  margin: 20px auto;
-  background-color: #e4e4e4;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-radius: 12px;
-}
-
 @media(max-width: 768px){
   .custom-container{
     max-width: 95%;
@@ -51,6 +40,15 @@ code {
 .actions span{
   margin: 0 5px;
   cursor: pointer;
+}
+
+.funcoesdeeditaredeletar{
+  /* background-color: rgb(252, 197, 57); */
+  display: flex;
+  flex: 2;  
+  padding: 0;
+  align-items: center;
+  /* width: 10px; */
 }
 
 .trash{

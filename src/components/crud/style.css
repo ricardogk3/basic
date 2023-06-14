@@ -11,3 +11,32 @@
   justify-content: center;
   align-items: center;
 }
+
+.tabelafora{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  color: rgb(70, 70, 70); /* Cor cinza para o texto */
+  /* background-color: red; */
+}
+
+.card:hover {
+  background-color: #ddd;
+}
+
+.card{
+  border-bottom: 2px solid #ddd;
+  border-left: 2px solid #ddd; 
+  border-right: 2px solid #ddd;
+}
+
+.tabelafora .last-item{
+  /* border-bottom: none; */
+  /* border-bottom: 2px solid #ca0000; */
+}
+
+/* .card:last-child {
+  border-bottom: none;
+} */

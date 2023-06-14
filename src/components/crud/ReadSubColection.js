@@ -5,6 +5,7 @@ import { getSubcollection } from "../../store/action";
 import Card from './Card'
 import Button from '@mui/material/Button';
 import { userContext } from '../../components/UserContext';
+import './style.css'
 import { Dots } from "react-activity";
 
 export default function ReadSubColection(p) {
@@ -93,12 +94,13 @@ export default function ReadSubColection(p) {
                         {p.parametros.titulo}
                     </h1>
                     {books && books.length > 0 ? (
-                        <>
+                        <div className="tabelafora">
                             <div style={styles.c1}>
                                 <div style={styles.c2}>
                                     {p.parametros.input.map((v, i) => (
                                         <p style={styles.c3} key={i}>{v.titulo}</p>
                                     ))}
+                                    <p style={styles.c4}></p>
                                     <p style={styles.c4}></p>
                                 </div>
                             </div>
@@ -115,7 +117,7 @@ export default function ReadSubColection(p) {
                                     />
                                 </div>
                             ))}
-                            <div style={styles.c1}>
+                            <div style={styles.c11}>
                                 <div style={styles.c2}>
                                     {p.parametros.input.map((v, i) => {
                                         if (v.tipo === 'number' && v.media) {
@@ -135,7 +137,7 @@ export default function ReadSubColection(p) {
                                     <p style={styles.c4}></p>
                                 </div>
                             </div>
-                        </>
+                        </div>
                     )
                         : (
                             <div className="message-box">
@@ -162,13 +164,25 @@ const styles = {
         justifyContent: 'center',
         background: '#eee',
         fontWeight: 'bold',
+        height: '30px',
+        border: '2px solid #ddd', 
+    },
+    c11: {
+        display: "flex",
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#eee',
+        fontWeight: 'bold',
+        height: '30px',
+        border: '2px solid #ddd',
+        borderTop: "none"
     },
     c2: {
         display: "flex",
         width: '100%',
     },
     c3: {
-        flex: 3,
+        flex: 4,
         display: "flex",
         justifyContent: 'center',
     },

@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, collectionGroup } from 'firebase/firestore';
 import { db } from '../firebase';
 
 // Actions Types
@@ -45,7 +45,7 @@ export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) =>
       const data = doc.data();
       return { id: doc.id, originalId, ...data }; // Adiciona o ID da coleção aos dados da subcoleção
     });
-    const enviaIdSub = {[originalId]:subcolecaoArray}
+    const enviaIdSub = { [originalId]: subcolecaoArray }
     dispatch({
       type: GET_SUBCOLLECTION,
       payload: enviaIdSub,
@@ -53,6 +53,60 @@ export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) =>
   }
   return true
 };
+
+export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (dispatch) => {
+
+  const q = query(collection(db, collectionF));
+  const books = await getDocs(q);
+  if (books.docs.length > 0) {
+    const bookIds = books.docs.map((snap) => snap.id); // Obter apenas os IDs dos documentos
+    console.log(bookIds)
+    bookIds.map(async (originalId) => {
+      const originalDocRef = doc(db, collectionF, originalId);
+
+      const subcolecaoRef = collection(originalDocRef, subcolecaoFirebase);
+      const subcolecaoDocs = await getDocs(subcolecaoRef);
+
+      if (subcolecaoDocs.docs.length > 0) {
+        const subcolecaoArray = subcolecaoDocs.docs.map((doc) => {
+          const data = doc.data();
+          return { id: doc.id, originalId, ...data }; // Adiciona o ID da coleção aos dados da subcoleção
+        });
+        const enviaIdSub = { [originalId]: subcolecaoArray }
+        dispatch({
+          type: GET_SUBCOLLECTION,
+          payload: enviaIdSub,
+        });
+      }
+    })
+    // dispatch({
+    //   type: GET_BOOKS,
+    //   payload: bookIds,
+    // });
+  }
+  // const colecaoRef = collection(db, collectionF);
+
+  // console.log("chegou aqui", colecaoRef)
+  // const query = query(collectionGroup(colecaoRef, subcolecaoFirebase));
+
+  // const subcolecaoDocs = await getDocs(query);
+
+  // if (subcolecaoDocs.docs.length > 0) {
+  //   const subcolecaoArray = subcolecaoDocs.docs.map((doc) => {
+  //     const data = doc.data();
+  //     return { id: doc.id, ...data }; // Não é necessário adicionar o ID da coleção original
+  //   });
+
+  //   dispatch({
+  //     type: GET_SUBCOLLECTION,
+  //     payload: subcolecaoArray,
+  //   });
+  // }
+
+  // return true;
+};
+
+
 
 
 export const addBook = (collectionF, bookData) => async (dispatch) => {
@@ -107,10 +161,10 @@ export const addSubcollection = (collectionF, originalId, subcolecaoFirebase, su
     const docRef = await addDoc(subcollectionRef, subcollectionData);
     const subcollection = { id: docRef.id, ...subcollectionData };
     const enviaIdSub = { [originalId]: subcollection };
-// payload: { id, subcollection },
-dispatch({
-  type: ADD_SUBCOLLECTION,
-        payload: enviaIdSub,
+    // payload: { id, subcollection },
+    dispatch({
+      type: ADD_SUBCOLLECTION,
+      payload: enviaIdSub,
     });
   } catch (error) {
     console.log('Error adding subcollection:', error);

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import Read from './crud/Read';
 // import CRUD from './crud/CRUD';
@@ -9,7 +9,8 @@ export default function TodoList() {
   useFirestoreConnect('users');
 
   // Obtém a lista de usuários do Firestore
-  const users = useSelector(state => state.reducer);
+  // const users = useSelector(state => state.reducer);
+  // console.log(users)
 
   const parametros = {
     titulo: 'Teste',
@@ -38,10 +39,17 @@ export default function TodoList() {
       media: true
     }, {
       n: 5,
+      tipo: 'subsoma',
+      titulo: 'Total de sub:',
+      formnome:'Valor:',
+      soma: false,
+      media: true
+    }, {
+      n: 6,
       tipo: 'date',
       titulo: 'Dia da compra',
     }, {
-      n: 6,
+      n: 7,
       tipo: 'select',
       titulo: 'Selecao',
       selecao: ['S1', 'S2']
