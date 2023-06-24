@@ -113,6 +113,7 @@ export default function Principal() {
                 } path="/" exact />
                 <Route element={userDados.adm ? <Adm /> : <PaginaInvalida />} path="/adm" exact />
                 <Route element={<Configuracoes />} path="/configuracoes" exact />
+                <Route element={<PaginaInvalida />} path="*" />
             </Routes>
         </BrowserRouter>
     )
