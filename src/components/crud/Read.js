@@ -30,6 +30,7 @@ export default function Read(p) {
                     userDados // Dados do usuário
                 );
             }
+            return null;
         })
     }
 

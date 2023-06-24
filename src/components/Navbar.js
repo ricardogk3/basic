@@ -20,7 +20,7 @@ const Navbar = () => {
       <IconContext.Provider value={{ color: '#fff' }}>
         <div className='navbar'>
           <Link to='#' className='menu-bars'>
-            <img src={logo1} onClick={showSidebar} style={{ flex: 1, height: 60, resizeMode: 'contain' }} />
+            <img src={logo1} alt="Logo Basic" onClick={showSidebar} style={{ flex: 1, height: 60, resizeMode: 'contain' }} />
           </Link>
           <div className="Cabecalho">
             <div >
@@ -48,6 +48,7 @@ const Navbar = () => {
                   </li>
                 );
               }
+              return null;
             })}
           </ul>
         </nav>

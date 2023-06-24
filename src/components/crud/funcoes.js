@@ -20,15 +20,17 @@ export function somaSubcolecao(v, colecao, subcolecao, todosVeem, userDados) {
             Array.isArray(dadosColecao.subcollection[key]) &&
             dadosColecao.subcollection[key].length > 0
         ) {
-            dadosColecao.subcollection[key].map((valorprasomar, i) => {
+            return dadosColecao.subcollection[key].map((valorprasomar, i) => {
                 // Verificar se todosVeem é verdadeiro e se o uid da subcoleção é igual ao uid do usuário
                 if (!todosVeem && valorprasomar.uid === userDados.uid) {
                     soma = soma + parseFloat(valorprasomar[v.formnome]);
                 } else if (todosVeem) {
                     soma = soma + parseFloat(valorprasomar[v.formnome]);
                 }
+                return null;
             });
         }
+        return null;
     });
     return soma
 }

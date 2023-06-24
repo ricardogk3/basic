@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { userContext } from '../components/UserContext';
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 // import firebase from '../firebase';
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
@@ -28,8 +28,6 @@ export default function Login() {
         msg: ''
     })
 
-    // const auth = useAuth();
-
     const handleInputChange = (name, value) => {
         setState({
             ...state, [name]: value
@@ -38,7 +36,6 @@ export default function Login() {
 
     useEffect(
         () => {
-            // const auth = firebase.auth;
             const unsubscribed = auth.onAuthStateChanged(
                 user => {
                     if (user) {
@@ -61,7 +58,6 @@ export default function Login() {
     )
 
     const login = async () => {
-        // const auth = firebase.auth;
         const { email, senha } = state;
         try {
             await signInWithEmailAndPassword(auth, email, senha);
@@ -69,7 +65,6 @@ export default function Login() {
             setState({ ...state, msg: 'Email ou senha inválidos' });
         }
     }
-
 
     const [values, setValues] = useState({
         amount: '',
@@ -82,10 +77,11 @@ export default function Login() {
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
         setState({
-            ...state, ['senha']: event.target.value
-        })
+            ...state,
+            'senha': event.target.value
+        });
     }
-
+    
     const handleClickShowPassword = () => {
         setValues({
             ...values,
@@ -96,7 +92,6 @@ export default function Login() {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-
 
     if (loading) {
         return (
@@ -112,7 +107,7 @@ export default function Login() {
         <div className="Login" style={{ background: 'black', height: "100vh" }}>
             <div className="Login1">
                 <div style={{ height: "50vh" }}>
-                    <img src={logo1} style={{ height: "100%" }} />
+                    <img src={logo1} alt="Logo Basic Login" style={{ height: "100%" }} />
                 </div>
                 <FormControl sx={{ background: '#999', padding: 1, borderRadius: 2 }}>
                     <TextField

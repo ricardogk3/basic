@@ -36,7 +36,6 @@ export const getDadosColecao = (collectionF) => async (dispatch) => {
 
 export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) => async (dispatch) => {
   const originalDocRef = doc(db, collectionF, originalId);
-
   const subcolecaoRef = collection(originalDocRef, subcolecaoFirebase);
   const subcolecaoDocs = await getDocs(subcolecaoRef);
 
@@ -54,10 +53,11 @@ export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) =>
   return true
 };
 
-export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (dispatch) => {
 
+export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (dispatch) => {
   const q = query(collection(db, collectionF));
   const dadosColecao = await getDocs(q);
+
   if (dadosColecao.docs.length > 0) {
     const bookIds = dadosColecao.docs.map((snap) => snap.id); // Obter apenas os IDs dos documentos
     bookIds.map(async (originalId) => {
@@ -78,33 +78,8 @@ export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (d
         });
       }
     })
-    // dispatch({
-    //   type: GET_BOOKS,
-    //   payload: bookIds,
-    // });
   }
-  // const colecaoRef = collection(db, collectionF);
-
-  // const query = query(collectionGroup(colecaoRef, subcolecaoFirebase));
-
-  // const subcolecaoDocs = await getDocs(query);
-
-  // if (subcolecaoDocs.docs.length > 0) {
-  //   const subcolecaoArray = subcolecaoDocs.docs.map((doc) => {
-  //     const data = doc.data();
-  //     return { id: doc.id, ...data }; // Não é necessário adicionar o ID da coleção original
-  //   });
-
-  //   dispatch({
-  //     type: GET_SUBCOLLECTION,
-  //     payload: subcolecaoArray,
-  //   });
-  // }
-
-  // return true;
 };
-
-
 
 
 export const addDadoColecao = (collectionF, bookData) => async (dispatch) => {
@@ -121,6 +96,7 @@ export const addDadoColecao = (collectionF, bookData) => async (dispatch) => {
   }
 };
 
+
 export const updateDadoColecao = (collectionF, editedBook) => async (dispatch) => {
   try {
     const bookRef = doc(db, collectionF, editedBook.id);
@@ -134,6 +110,7 @@ export const updateDadoColecao = (collectionF, editedBook) => async (dispatch) =
     console.log('Error updating dadoColecao:', error);
   }
 };
+
 
 export const deleteDadoColecao = (collectionF, id) => async (dispatch) => {
   try {
@@ -149,6 +126,7 @@ export const deleteDadoColecao = (collectionF, id) => async (dispatch) => {
   }
 };
 
+
 export const addSubcollection = (collectionF, originalId, subcolecaoFirebase, subcollectionData) => async (
   dispatch
 ) => {
@@ -158,7 +136,6 @@ export const addSubcollection = (collectionF, originalId, subcolecaoFirebase, su
     const docRef = await addDoc(subcollectionRef, subcollectionData);
     const subcollection = { id: docRef.id, ...subcollectionData };
     const enviaIdSub = { [originalId]: subcollection };
-    // payload: { id, subcollection },
     dispatch({
       type: ADD_SUBCOLLECTION,
       payload: enviaIdSub,

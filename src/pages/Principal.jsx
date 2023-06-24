@@ -9,8 +9,8 @@ import Navbar from '../components/Navbar';
 import PaginaInvalida from '../components/PaginaInvalida';
 import Read from '../components/crud/Read';
 
-export default function Login() {
-    const { logado, deslogado, user } = useContext(userContext);
+export default function Principal() {
+    const { user } = useContext(userContext);
     const userDados = userProvider(user)
     const parametros = {
         titulo: 'Teste',
@@ -112,7 +112,6 @@ export default function Login() {
                     />
                 } path="/" exact />
                 <Route element={userDados.adm ? <Adm /> : <PaginaInvalida />} path="/adm" exact />
-                {/* <Route element={userDados.adm ? <Configuracoes /> : <PaginaInvalida />} path="/configuracoes" exact /> */}
                 <Route element={<Configuracoes />} path="/configuracoes" exact />
             </Routes>
         </BrowserRouter>

@@ -120,6 +120,7 @@ export const CreateAndEdit = ({
                                     </div>
                                 )
                             }
+                            return null;
                         })}
 
                         <div className='formulario' style={{ height: '45px' }}>
@@ -201,8 +202,8 @@ export const CreateAndEdit = ({
                                     </div>
                                 )
                             }
+                            return null;
                         })}
-
 
                         <div className='formulario' style={{ height: '45px' }}>
                             <Button variant="contained" type="submit" className='btn btn-success btn-md'>ATUALIZAR</Button>

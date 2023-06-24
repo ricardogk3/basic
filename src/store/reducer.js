@@ -44,10 +44,7 @@ const reducer = (state = initialState, action) => {
                 // A chave não existe na subcoleção, crie uma nova entrada com o novo item
                 state.subcollection[chave] = [novoItem];
             }
-
             return { ...state };
-
-
         case UPDATE_SUBCOLLECTION:
             return {
                 ...state,

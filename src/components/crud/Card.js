@@ -69,11 +69,12 @@ export default function RecipeReviewCard(b) {
                         </div>
                         : <></>}
                     {b.parametros.input.map((v, i) => {
-                        if (v.tipo == 'subsoma') {
+                        if (v.tipo === 'subsoma') {
                             var soma = 0;
                             if (Array.isArray(dadosColecao.subcollection[b.dadoColecao.id]) && dadosColecao.subcollection[b.dadoColecao.id].length > 0) {
                                 dadosColecao.subcollection[b.dadoColecao.id].map((valorprasomar, i) => {
                                     soma = soma + parseFloat(valorprasomar[v.formnome])
+                                    return null;
                                 })
                             }
                             return (
@@ -81,7 +82,7 @@ export default function RecipeReviewCard(b) {
                                     <p>{soma}</p>
                                 </div>
                             )
-                        } else if (v.tipo == 'date') {
+                        } else if (v.tipo === 'date') {
                             var dataString = '0000-00-00'
                             if (typeof (dataString) === 'string') {
                                 dataString = b.dadoColecao[v.titulo];
