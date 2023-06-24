@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
@@ -6,13 +6,14 @@ import './Navbar.css';
 import { IconContext } from 'react-icons';
 import logo1 from "../images/logo1.png";
 import UserView from './UserView';
+import { userContext } from '../components/UserContext'
+import { userProvider } from '../components/crud/funcoes'
 
-// function Navbar() {
 const Navbar = () => {
   const [sidebar, setSidebar] = useState(false);
-
-  // const [userAccount, setUserAccount] = useState({});
   const showSidebar = () => setSidebar(!sidebar);
+  const { user } = useContext(userContext);
+  const userDados = userProvider(user)
 
   return (
     <>
@@ -23,9 +24,8 @@ const Navbar = () => {
           </Link>
           <div className="Cabecalho">
             <div >
-              {/* <img src={logo1} style={{flex: 1,  height: 50, resizeMode: 'contain'}}/> */}
             </div>
-            <h1 style={{ color: "white" }}>Name App</h1>
+            <h1 style={{ color: "white" }}>Básico</h1>
             <UserView />
           </div>
         </div>
@@ -37,19 +37,17 @@ const Navbar = () => {
               </Link>
             </li>
             {SidebarData.map((item, index) => {
-              // let userAdm = userAccount.adm
-              // console.log(userAdm)
-
-              // if (item.requireAdm === userAdm || userAdm) {
-              //   return (
-              //     <li key={index} className={item.cName}>
-              //       <Link to={item.path}>
-              //         {item.icon}
-              //         <span>{item.title}</span>
-              //       </Link>
-              //     </li>
-              //   );
-              // }
+              let userAdm = userDados.adm
+              if (item.requireAdm === userAdm || userAdm) {
+                return (
+                  <li key={index} className={item.cName}>
+                    <Link to={item.path}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>
+                );
+              }
             })}
           </ul>
         </nav>

@@ -1,39 +1,38 @@
-import { ADD_BOOK, DELETE_BOOK, GET_BOOKS, UPDATE_BOOK, ADD_SUBCOLLECTION, UPDATE_SUBCOLLECTION, DELETE_SUBCOLLECTION, GET_SUBCOLLECTION } from "./action";
+import { ADD_DADOCOLECAO, DELETE_DADOCOLECAO, GET_DADOSCOLECAO, UPDATE_DADOCOLECAO, ADD_SUBCOLLECTION, UPDATE_SUBCOLLECTION, DELETE_SUBCOLLECTION, GET_SUBCOLLECTION } from "./action";
 
 // Reducer
 const initialState = {
-    books: [],
+    dadosColecao: [],
     subcollection: {},
 };
 
 const reducer = (state = initialState, action) => {
     const chave = !!action.payload ? Object.keys(action.payload)[0] : {};
     switch (action.type) {
-        case GET_BOOKS:
+        case GET_DADOSCOLECAO:
             return {
                 ...state,
-                books: action.payload,
+                dadosColecao: action.payload,
             };
         case GET_SUBCOLLECTION:
-            console.log(action.payload)
             state.subcollection[chave] = Object.values(action.payload)[0]
             return { ...state }
-        case ADD_BOOK:
+        case ADD_DADOCOLECAO:
             return {
                 ...state,
-                books: [...state.books, action.payload],
+                dadosColecao: [...state.dadosColecao, action.payload],
             };
-        case UPDATE_BOOK:
+        case UPDATE_DADOCOLECAO:
             return {
                 ...state,
-                books: state.books.map((book) =>
-                    book.id === action.payload.id ? action.payload : book
+                dadosColecao: state.dadosColecao.map((dadoColecao) =>
+                    dadoColecao.id === action.payload.id ? action.payload : dadoColecao
                 ),
             };
-        case DELETE_BOOK:
+        case DELETE_DADOCOLECAO:
             return {
                 ...state,
-                books: state.books.filter((book) => book.id !== action.payload),
+                dadosColecao: state.dadosColecao.filter((dadoColecao) => dadoColecao.id !== action.payload),
             };
         case ADD_SUBCOLLECTION:
             const novoItem = Object.values(action.payload)[0];

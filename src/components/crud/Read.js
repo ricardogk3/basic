@@ -1,23 +1,42 @@
 import { useSelector, useDispatch } from "react-redux";
 import { CreateAndEdit } from "./CreateAndEdit";
 import React, { useState, useEffect, useContext } from 'react';
-import { getBooks } from "../../store/action";
+import { getDadosColecao } from "../../store/action";
 import Card from './Card'
 import Button from '@mui/material/Button';
-import { userContext } from '../../components/UserContext';
 import './style.css'
 import { Dots } from "react-activity";
+import { somaSubcolecao, contarDadosMesmoUID } from './funcoes';
+import ExportToExcel from "./Excel";
+import { userContext } from '../UserContext'
+import { userProvider } from '../crud/funcoes'
 
 export default function Read(p) {
     const dispatch = useDispatch();
     const { user } = useContext(userContext);
-    const books = useSelector((state) => state.reducer.books);
+    const dadosColecao = useSelector((state) => state.reducer.dadosColecao);
     const [loading, setLoading] = useState(true);
+    let soma = 0;
+    const userDados = userProvider(user)
+
+    if (!!p.parametros.subcolecao) {
+        p.parametros.input.map((v, i) => {
+            if (v.tipo === 'subsoma') {
+                soma = somaSubcolecao(
+                    v,
+                    p.parametros.colecaoFirebase,
+                    p.parametros.subcolecao.colecaoFirebase,
+                    p.parametros.todosVeem, // Variável que indica se todos veem os dados
+                    userDados // Dados do usuário
+                );
+            }
+        })
+    }
 
     useEffect(() => {
-        dispatch(getBooks(p.parametros.colecaoFirebase))
+        dispatch(getDadosColecao(p.parametros.colecaoFirebase))
         const fetchData = async () => {
-            const result = await dispatch(getBooks(p.parametros.colecaoFirebase));
+            const result = await dispatch(getDadosColecao(p.parametros.colecaoFirebase));
             if (result) {
                 setLoading(false)
             }
@@ -25,12 +44,10 @@ export default function Read(p) {
         fetchData();
     }, [dispatch])
 
-
-
     useEffect(() => {
         setEditFormVisibility(false);
         setAddoredit(false)
-    }, [books])
+    }, [dadosColecao])
 
     const [editFormVisibility, setEditFormVisibility] = useState(false);
     const [bookToBeEdited, setBookToBeEdited] = useState('');
@@ -46,9 +63,9 @@ export default function Read(p) {
         setBookToBeEdited('');
     }
 
-    const editfunction = (book) => {
+    const editfunction = (dadoColecao) => {
         setAddoredit(true)
-        handleEdit(book)
+        handleEdit(dadoColecao)
     }
 
     if (loading) {
@@ -90,11 +107,16 @@ export default function Read(p) {
                     <h1 className="heading">
                         {p.parametros.titulo}
                     </h1>
-                    {books.length > 0 ? (
+                    {dadosColecao.length > 0 ? (
                         <div className="tabelafora">
                             <div style={styles.c1}>
                                 <div style={styles.c2}>
                                     {!!p.parametros.subcolecao ? <p style={styles.c4}></p>
+                                        : <></>}
+                                    {p.parametros.mostrarQuemCriou ?
+                                        <div style={{ flex: 4, display: 'flex', flexDirection: "row", justifyContent: 'center', alignSelf: 'center' }} >
+                                            <p>Autor:</p>
+                                        </div>
                                         : <></>}
                                     {p.parametros.input.map((v, i) => (
                                         <p style={styles.c3} key={i}>{v.titulo}</p>
@@ -103,35 +125,70 @@ export default function Read(p) {
                                     <p style={styles.c4}></p>
                                 </div>
                             </div>
-                            {books.map((book, i) => (
-                                
-                                <div  
-                                className={`card-item ${i === books.length - 1 ? 'last-item' : ''}`}
-                                style={i % 2 === 0 ? { backgroundColor: '#fff' } : { backgroundColor: '#f0f0f0' }} key={i}>
-                                    <Card
-                                        book={book}
-                                        editFormVisibility={editFormVisibility}
-                                        editfunction={editfunction}
-                                        inputs={p.parametros.input}
-                                        colecao={p.parametros.colecaoFirebase}
-                                        subcolecao={p.parametros.subcolecao}
-                                        sub={false}
-                                    />
-                                </div>
-                            ))}
+                            {dadosColecao
+                                .sort((a, b) => new Date(a[p.parametros.input[5].titulo]) - new Date(b[p.parametros.input[5].titulo]))
+                                .map((dadoColecao, i) => {
+                                    if (p.parametros.todosVeem || dadoColecao.uid === userDados.uid) {
+                                        return (
+                                            <div
+                                                className={`card-item ${i === dadosColecao.length - 1 ? 'last-item' : ''}`}
+                                                style={i % 2 === 0 ? { backgroundColor: '#fff' } : { backgroundColor: '#f0f0f0' }}
+                                                key={i}
+                                            >
+                                                <Card
+                                                    dadoColecao={dadoColecao}
+                                                    editFormVisibility={editFormVisibility}
+                                                    editfunction={editfunction}
+                                                    parametros={p.parametros}
+                                                    colecao={p.parametros.colecaoFirebase}
+                                                    subcolecao={p.parametros.subcolecao}
+                                                    sub={false}
+                                                />
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                })}
+
                             <div style={styles.c11}>
                                 <div style={styles.c2}>
+                                    {p.parametros.mostrarQuemCriou ?
+                                        <div style={{ flex: 4, display: 'flex', flexDirection: "row", justifyContent: 'center', alignSelf: 'center' }} >
+                                            <p></p>
+                                        </div>
+                                        : <></>}
                                     {p.parametros.input.map((v, i) => {
-                                        if (v.tipo === 'number' && v.media) {
-                                            const sum = books.reduce((accumulator, currentValue) =>
-                                                accumulator + parseFloat(currentValue[v.titulo]), 0
-                                            )
+                                        if (v.tipo === 'number' && v.soma) {
+                                            const sum = dadosColecao.reduce((accumulator, currentValue) => {
+                                                // Verificar se todosVeem é falso e se o UID é igual ao do usuário
+                                                if (!p.parametros.todosVeem && currentValue.uid === userDados.uid) {
+                                                    return accumulator + parseFloat(currentValue[v.titulo]);
+                                                } else if (p.parametros.todosVeem) {
+                                                    return accumulator + parseFloat(currentValue[v.titulo]);
+                                                }
+                                                // Caso contrário, não adicionar o valor ao acumulador
+                                                return accumulator;
+                                            }, 0);
                                             return <p style={styles.c3} key={i}>Total: {sum.toFixed(2)}</p>
-                                        } else if (v.tipo === 'number' && v.soma) {
-                                            const sum = books.reduce((accumulator, currentValue) =>
-                                                accumulator + parseFloat(currentValue[v.titulo]), 0
-                                            )
-                                            return <p style={styles.c3} key={i}>Média: {(sum / books.length).toFixed(2)}</p>
+                                        } else if (v.tipo === 'number' && v.media) {
+                                            const quantidade = contarDadosMesmoUID(dadosColecao, userDados.uid, p.parametros.todosVeem);
+                                            const sum = dadosColecao.reduce((accumulator, currentValue) => {
+                                                // Verificar se todosVeem é falso e se o UID é igual ao do usuário
+                                                if (!p.parametros.todosVeem && currentValue.uid === userDados.uid) {
+                                                    return accumulator + parseFloat(currentValue[v.titulo]);
+                                                } else if (p.parametros.todosVeem) {
+                                                    return accumulator + parseFloat(currentValue[v.titulo]);
+                                                }
+                                                // Caso contrário, não adicionar o valor ao acumulador
+                                                return accumulator;
+                                            }, 0);
+                                            return <p style={styles.c3} key={i}>Média: {(sum / quantidade).toFixed(2)}</p>
+                                        } else if (v.tipo === 'subsoma' && v.soma) {
+                                            return <p style={styles.c3} key={i}>Total: {soma.toFixed(2)}</p>
+                                        } else if (v.tipo === 'subsoma' && v.media) {
+                                            const quantidade = contarDadosMesmoUID(dadosColecao, userDados.uid, p.parametros.todosVeem);
+                                            return <p style={styles.c3} key={i}>Média: {(soma / quantidade).toFixed(2)}</p>
+
                                         } else {
                                             return <p style={styles.c3} key={i}></p>
                                         }
@@ -140,7 +197,7 @@ export default function Read(p) {
                                     <p style={styles.c4}></p>
                                 </div>
                             </div>
-                            {/* {books.length > 1 && (
+                            {/* {dadosColecao.length > 1 && (
                                     <div className="centraliza">
                                         <Button variant="contained"
                                             className="meu-botao"
@@ -164,7 +221,10 @@ export default function Read(p) {
                             onClick={() => setAddoredit(true)}
                         >ADICIONAR</Button>
                     </div>
-
+                    <ExportToExcel
+                        todosVeem={p.parametros.todosVeem}
+                        userDados={userDados}
+                    />
                 </div>
             }
         </>
@@ -194,15 +254,21 @@ const styles = {
     c2: {
         display: "flex",
         width: '100%',
+        overflowX: "auto",
+        whiteSpace: "nowrap"
     },
     c3: {
         flex: 4,
         display: "flex",
         justifyContent: 'center',
+        '@media (maxWidth: 768px)': {
+            flex: 2
+        }
     },
     c4: {
         flex: 1,
         display: "flex",
         justifyContent: 'center',
     },
+
 };

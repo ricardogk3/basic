@@ -11,7 +11,7 @@ import { Dots } from "react-activity";
 export default function ReadSubColection(p) {
     const dispatch = useDispatch();
     const { user } = useContext(userContext);
-    const books = useSelector((state) => state.reducer.subcollection[p.dados]);
+    const dadosColecao = useSelector((state) => state.reducer.subcollection[p.dados]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export default function ReadSubColection(p) {
     useEffect(() => {
         setEditFormVisibility(false);
         setAddoredit(false)
-    }, [books])
+    }, [dadosColecao])
 
     const [editFormVisibility, setEditFormVisibility] = useState(false);
     const [bookToBeEdited, setBookToBeEdited] = useState('');
@@ -44,15 +44,15 @@ export default function ReadSubColection(p) {
         setBookToBeEdited('');
     }
 
-    const editfunction = (book) => {
+    const editfunction = (dadoColecao) => {
         setAddoredit(true)
-        handleEdit(book)
+        handleEdit(dadoColecao)
     }
 
     if (loading) {
         return (
             <div className="loading2">
-                <div style={{ alignContent: 'end', justifyContent: 'center'}}>
+                <div style={{ alignContent: 'end', justifyContent: 'center' }}>
                     <Dots />
                 </div>
             </div>
@@ -76,8 +76,8 @@ export default function ReadSubColection(p) {
                         colecaoOriginal={p.colecaoOriginal}
                         idOriginal={p.dados}
                         setAddoredit={setAddoredit}
-                        setEditFormVisibility = {setEditFormVisibility}
-                        
+                        setEditFormVisibility={setEditFormVisibility}
+
                     />
                     <div className="centraliza">
                         <Button variant="contained"
@@ -93,7 +93,7 @@ export default function ReadSubColection(p) {
                     <h1 className="heading">
                         {p.parametros.titulo}
                     </h1>
-                    {books && books.length > 0 ? (
+                    {dadosColecao && dadosColecao.length > 0 ? (
                         <div className="tabelafora">
                             <div style={styles.c1}>
                                 <div style={styles.c2}>
@@ -104,13 +104,13 @@ export default function ReadSubColection(p) {
                                     <p style={styles.c4}></p>
                                 </div>
                             </div>
-                            {books.map((book, i) => (
+                            {dadosColecao.map((dadoColecao, i) => (
                                 <div key={i}>
                                     <Card
-                                        book={book}
+                                        dadoColecao={dadoColecao}
                                         editFormVisibility={editFormVisibility}
                                         editfunction={editfunction}
-                                        inputs={p.parametros.input}
+                                        parametros={p.parametros}
                                         subcolecaoName={p.parametros.colecaoFirebase}
                                         colecaoOriginal={p.colecaoOriginal}
                                         sub={true}
@@ -121,15 +121,15 @@ export default function ReadSubColection(p) {
                                 <div style={styles.c2}>
                                     {p.parametros.input.map((v, i) => {
                                         if (v.tipo === 'number' && v.media) {
-                                            const sum = books.reduce((accumulator, currentValue) =>
+                                            const sum = dadosColecao.reduce((accumulator, currentValue) =>
                                                 accumulator + parseFloat(currentValue[v.titulo]), 0
                                             )
                                             return <p style={styles.c3} key={i}>Total: {sum.toFixed(2)}</p>
                                         } else if (v.tipo === 'number' && v.soma) {
-                                            const sum = books.reduce((accumulator, currentValue) =>
+                                            const sum = dadosColecao.reduce((accumulator, currentValue) =>
                                                 accumulator + parseFloat(currentValue[v.titulo]), 0
                                             )
-                                            return <p style={styles.c3} key={i}>Média: {(sum / books.length).toFixed(2)}</p>
+                                            return <p style={styles.c3} key={i}>Média: {(sum / dadosColecao.length).toFixed(2)}</p>
                                         } else {
                                             return <p style={styles.c3} key={i}></p>
                                         }
@@ -165,7 +165,7 @@ const styles = {
         background: '#eee',
         fontWeight: 'bold',
         height: '30px',
-        border: '2px solid #ddd', 
+        border: '2px solid #ddd',
     },
     c11: {
         display: "flex",

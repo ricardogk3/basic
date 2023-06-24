@@ -25,9 +25,11 @@ function App() {
     //   <header className="App-header">
     <div >
       {/* <img src={logo} className="App-logo" alt="logo" /> */}
-      <userContext.Provider value={{ logado, deslogado, user }}>
-        {isLogged ? <Principal /> : <Login />}
-      </userContext.Provider>
+
+        <userContext.Provider value={{ logado, deslogado, user }}>
+          {isLogged ? <Principal /> : <Login />}
+        </userContext.Provider>
+
 
     </div>
   );

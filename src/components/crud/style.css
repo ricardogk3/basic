@@ -1,5 +1,4 @@
 .formulario {
-  /* background-color: #000; */
   height: 80px;
   display: flex;
   justify-content: center;
@@ -12,31 +11,88 @@
   align-items: center;
 }
 
-.tabelafora{
+.tabelafora {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 10px;
   overflow: hidden;
-  color: rgb(70, 70, 70); /* Cor cinza para o texto */
-  /* background-color: red; */
+  color: rgb(70, 70, 70);
 }
 
 .card:hover {
   background-color: #ddd;
 }
 
-.card{
+.card {
   border-bottom: 2px solid #ddd;
-  border-left: 2px solid #ddd; 
+  border-left: 2px solid #ddd;
   border-right: 2px solid #ddd;
 }
 
-.tabelafora .last-item{
-  /* border-bottom: none; */
-  /* border-bottom: 2px solid #ca0000; */
+.falsobutton {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* .card:last-child {
-  border-bottom: none;
-} */
+.falsobutton:hover {
+  background-color: #0056b3;
+}
+
+.falsobutton:active {
+  background-color: #003c80;
+}
+
+.falsobutton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+.excel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.excel-icon {
+  padding-left: 5px;
+}
+
+.pCard {
+  max-width: '100%';
+  overflow: 'hidden';
+  text-overflow: 'ellipsis';
+  white-space: 'normal';
+  word-wrap: 'break-word';
+  padding: '5px';
+  text-align: 'justify'
+}
+
+.pCardDiv {
+  flex: 4;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.pCardMostrarQuemCriou {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+}

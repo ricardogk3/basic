@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { userContext } from '../components/UserContext';
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword  } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase';
 // import firebase from '../firebase';
 import { Dots } from "react-activity";
@@ -15,20 +15,19 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import logo1 from '../images/logo1.png'
 
 export default function Login() {
     const { logado, deslogado } = useContext(userContext);
 
     const [loading, setLoading] = useState(true);
 
-    const [newUser, setNewUser] = useState(false);
-
     const [state, setState] = useState({
         email: '',
         senha: '',
         msg: ''
     })
-    
+
     // const auth = useAuth();
 
     const handleInputChange = (name, value) => {
@@ -72,35 +71,6 @@ export default function Login() {
     }
 
 
-    const cadastrar = async () => {
-        setLoading(true);
-        // const auth = firebase.auth;
-        const { email, senha } = state;
-
-
-        if (senha.length >= 6) {
-            try {
-                const res = await createUserWithEmailAndPassword(auth, email, senha);
-                const rep1 = await sendPasswordResetEmail(auth, email);
-                const user = res.user;
-                const chave = user.uid;
-
-                await db.collection('users').doc(user.uid).set({
-                    email: user.email
-                  });         
-
-                setState({ ...state, msg: "Verifique sua conta de email." })
-                setNewUser(false);
-            } catch (err) {
-                alert(err.message);
-                setState({ ...state, msg: "Não foi possível cadastrar o usuário." })
-            }
-        } else {
-            setState({ ...state, msg: "Senha deve conter no mínimo 6 caracteres." })
-        }
-        setLoading(false);
-    }
-
     const [values, setValues] = useState({
         amount: '',
         password: '',
@@ -131,7 +101,7 @@ export default function Login() {
     if (loading) {
         return (
             <div className="Login">
-                <div style={{ alignContent: 'end', justifyContent: 'center', height: '10vh', width: '10vh'}}>
+                <div style={{ alignContent: 'end', justifyContent: 'center', height: '10vh', width: '10vh' }}>
                     <Dots />
                 </div>
             </div>
@@ -142,14 +112,13 @@ export default function Login() {
         <div className="Login" style={{ background: 'black', height: "100vh" }}>
             <div className="Login1">
                 <div style={{ height: "50vh" }}>
-                    {/* <img src={logo1} style={{ height: "100%" }} /> */}
+                    <img src={logo1} style={{ height: "100%" }} />
                 </div>
                 <FormControl sx={{ background: '#999', padding: 1, borderRadius: 2 }}>
                     <TextField
                         id="outlined-basic"
                         label="E-mail"
                         variant="outlined"
-                        // className="Input" 
                         style={{ marginTop: 6, marginBottom: 6, background: "white" }}
                         sx={{ color: "white", borderRadius: 2 }}
                         defaultValue={state.email}

@@ -1,33 +1,33 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, collectionGroup } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 // Actions Types
-export const GET_BOOKS = 'GET_BOOKS';
-export const ADD_BOOK = 'ADD_BOOK';
-export const UPDATE_BOOK = 'UPDATE_BOOK';
-export const DELETE_BOOK = 'DELETE_BOOK';
+export const GET_DADOSCOLECAO = 'GET_DADOSCOLECAO';
+export const ADD_DADOCOLECAO = 'ADD_DADOCOLECAO';
+export const UPDATE_DADOCOLECAO = 'UPDATE_DADOCOLECAO';
+export const DELETE_DADOCOLECAO = 'DELETE_DADOCOLECAO';
 export const ADD_SUBCOLLECTION = 'ADD_SUBCOLLECTION';
 export const UPDATE_SUBCOLLECTION = 'UPDATE_SUBCOLLECTION';
 export const DELETE_SUBCOLLECTION = 'DELETE_SUBCOLLECTION';
 export const GET_SUBCOLLECTION = 'GET_SUBCOLLECTION';
 
 
-export const getBooks = (collectionF) => async (dispatch) => {
+export const getDadosColecao = (collectionF) => async (dispatch) => {
   const q = query(collection(db, collectionF));
-  const books = await getDocs(q);
-  if (books.docs.length > 0) {
-    const booksArray = [];
-    for (var snap of books.docs) {
+  const dadosColecao = await getDocs(q);
+  if (dadosColecao.docs.length > 0) {
+    const dadosColecaoArray = [];
+    for (var snap of dadosColecao.docs) {
       const data = snap.data();
       const bookData = {
         id: snap.id, // Adicionar o ID do documento
         ...data,
       };
-      booksArray.push(bookData);
+      dadosColecaoArray.push(bookData);
     }
     dispatch({
-      type: GET_BOOKS,
-      payload: booksArray
+      type: GET_DADOSCOLECAO,
+      payload: dadosColecaoArray
     })
   }
   return true
@@ -57,10 +57,9 @@ export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) =>
 export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (dispatch) => {
 
   const q = query(collection(db, collectionF));
-  const books = await getDocs(q);
-  if (books.docs.length > 0) {
-    const bookIds = books.docs.map((snap) => snap.id); // Obter apenas os IDs dos documentos
-    console.log(bookIds)
+  const dadosColecao = await getDocs(q);
+  if (dadosColecao.docs.length > 0) {
+    const bookIds = dadosColecao.docs.map((snap) => snap.id); // Obter apenas os IDs dos documentos
     bookIds.map(async (originalId) => {
       const originalDocRef = doc(db, collectionF, originalId);
 
@@ -86,7 +85,6 @@ export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (d
   }
   // const colecaoRef = collection(db, collectionF);
 
-  // console.log("chegou aqui", colecaoRef)
   // const query = query(collectionGroup(colecaoRef, subcolecaoFirebase));
 
   // const subcolecaoDocs = await getDocs(query);
@@ -109,46 +107,45 @@ export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (d
 
 
 
-export const addBook = (collectionF, bookData) => async (dispatch) => {
+export const addDadoColecao = (collectionF, bookData) => async (dispatch) => {
   try {
     const docRef = await addDoc(collection(db, collectionF), bookData);
-    const book = { id: docRef.id, ...bookData };
+    const dadoColecao = { id: docRef.id, ...bookData };
 
     dispatch({
-      type: ADD_BOOK,
-      payload: book,
+      type: ADD_DADOCOLECAO,
+      payload: dadoColecao,
     });
   } catch (error) {
-    console.log('Error adding book:', error);
+    console.log('Error adding dadoColecao:', error);
   }
 };
 
-export const updateBook = (collectionF, editedBook) => async (dispatch) => {
+export const updateDadoColecao = (collectionF, editedBook) => async (dispatch) => {
   try {
     const bookRef = doc(db, collectionF, editedBook.id);
     await updateDoc(bookRef, editedBook);
 
     dispatch({
-      type: UPDATE_BOOK,
+      type: UPDATE_DADOCOLECAO,
       payload: editedBook,
     });
   } catch (error) {
-    console.log('Error updating book:', error);
+    console.log('Error updating dadoColecao:', error);
   }
 };
 
-export const deleteBook = (collectionF, id) => async (dispatch) => {
-  console.log(collectionF, id)
+export const deleteDadoColecao = (collectionF, id) => async (dispatch) => {
   try {
     const bookRef = doc(db, collectionF, id);
     await deleteDoc(bookRef);
 
     dispatch({
-      type: DELETE_BOOK,
+      type: DELETE_DADOCOLECAO,
       payload: id,
     });
   } catch (error) {
-    console.log('Error deleting book:', error);
+    console.log('Error deleting dadoColecao:', error);
   }
 };
 

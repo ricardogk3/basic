@@ -1,83 +1,119 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Route, BrowserRouter, Routes, Switch } from "react-router-dom";
-import TodoList from '../components/TodoList';
-// import Notes from './pages/Notes';
-// import ListTicket from "./pages/ListTicket";
-// import Company from "./pages/Company";
-// import AddTicket from "./pages/AddData";
-// import DeleteTicket from "./pages/DeleteTicket";
-// import EditTicket from "./pages/EditTicket";
-// import Historico from "./pages/Historico";
-// import CreateUser from "./pages/CreateUser";
-// import Main from "./pages/Main";
-import Navbar from '../components/Navbar';
-// import firebase from './../firebase';
-// import UserView from '../UserView';
-import { db } from './../firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import React, { useContext } from 'react';
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 import { userContext } from '../components/UserContext';
+import { userProvider } from '../components/crud/funcoes'
+
+import Adm from '../components/Adm'
+import Configuracoes from '../components/Configuracoes';
+import Navbar from '../components/Navbar';
+import PaginaInvalida from '../components/PaginaInvalida';
+import Read from '../components/crud/Read';
 
 export default function Login() {
-    const [state, setState] = useState([]);
     const { logado, deslogado, user } = useContext(userContext);
-
-    useEffect(() => {
-        async function fetchData() {
-            const q = query(collection(db, 'users'), where('uid', '==', user.uid));
-            const querySnapshot = await getDocs(q);
-            const listUsers = querySnapshot.docs.map((doc) => ({
-                ...doc.data(),
-                key: doc.id,
-                id: doc.id,
-            }));
-            setState(listUsers);
+    const userDados = userProvider(user)
+    const parametros = {
+        titulo: 'Teste',
+        colecaoFirebase: 'Books',
+        todosVeem: true,
+        mostrarQuemCriou: true,
+        readType: 'card',
+        readSequence: 1,
+        input: [{
+            n: 1,
+            tipo: 'text',
+            titulo: 'Autor:',
+        }, {
+            n: 2,
+            tipo: 'text',
+            titulo: 'Titulo:',
+        }, {
+            n: 3,
+            tipo: 'number',
+            titulo: 'Valor:',
+            soma: true,
+            media: false
+        }, {
+            n: 4,
+            tipo: 'number',
+            titulo: 'Valor media:',
+            soma: false,
+            media: true
+        }, {
+            n: 5,
+            tipo: 'subsoma',
+            titulo: 'Total de sub:',
+            formnome: 'Valor:',
+            soma: false,
+            media: true
+        }, {
+            n: 6,
+            tipo: 'subsoma',
+            titulo: 'Total de sub:',
+            formnome: 'Valor:',
+            soma: true,
+            media: false
+        }, {
+            n: 7,
+            tipo: 'date',
+            titulo: 'Dia da compra',
+        }, {
+            n: 8,
+            tipo: 'select',
+            titulo: 'Selecao',
+            selecao: ['S1', 'S2']
+        }],
+        subcolecao: {
+            colecaoFirebase: 'subcolecao',
+            todosVeem: false,
+            mostrarQuemCriou: false,
+            readType: 'card',
+            readSequence: 2,
+            input: [{
+                n: 1,
+                tipo: 'text',
+                titulo: 'Autor:',
+            }, {
+                n: 2,
+                tipo: 'text',
+                titulo: 'Titulo:',
+            }, {
+                n: 3,
+                tipo: 'number',
+                titulo: 'Valor:',
+                soma: true,
+                media: false
+            }, {
+                n: 4,
+                tipo: 'number',
+                titulo: 'Valor media:',
+                soma: false,
+                media: true
+            }, {
+                n: 5,
+                tipo: 'date',
+                titulo: 'Dia da compra',
+            }, {
+                n: 6,
+                tipo: 'select',
+                titulo: 'Selecao',
+                selecao: ['S1', 'S2']
+            }],
         }
-        // fetchData();
-    }, [user]);
-
-    // const pegaDados = async () => {
-    //     const users = firebase.db.collection("users");
-    //     // const retorno = await users.where("uid", "===", user.uid).get();
-    //     const retorno = await users.where("uid", "==", user.uid).get();
-
-    //     const listUsers = [];
-    //     var a = 0;
-    //     retorno.forEach(
-    //         doc => {
-    //             listUsers.push({
-    //                 ...doc.data(),
-    //                 key: doc.id,
-    //                 id: a
-    //             })
-    //             a += 1
-    //         })
-
-    //     setState(listUsers);
-    //     // setDados(listUsers);
-    //     // if(listUsers.length==0){
-    //     //     setFigurinha(false)
-    //     // }
-    //     // else{
-    //     //     setFigurinha(true)
-    //     // }
-    // }
-
-
+    }
 
     return (
         <BrowserRouter>
             <Navbar />
             <Routes>
-                <Route element={<TodoList />} path="/" exact />
-                {/* <Route element={<Main />} path="/" exact /> */}
-                {/* <Route element={<Notes />} path="/notas" exact />
-                <Route element={<ListTicket />} path="/lucros" exact />
-                <Route element={<Company />} path="/companias" exact />
-                <Route element={<AddTicket />} path="/add" exact />
-                <Route element={<DeleteTicket />} path="/delete" exact />
-                <Route element={<EditTicket />} path="/edit/" exact />
-                <Route element={<Historico />} path="/hist/" exact />
-                <Route element={<CreateUser />} path="/createUser/" exact /> */}
+                <Route element={
+                    <Read
+                        parametros={parametros}
+                    />
+                } path="/" exact />
+                <Route element={userDados.adm ? <Adm /> : <PaginaInvalida />} path="/adm" exact />
+                {/* <Route element={userDados.adm ? <Configuracoes /> : <PaginaInvalida />} path="/configuracoes" exact /> */}
+                <Route element={<Configuracoes />} path="/configuracoes" exact />
             </Routes>
         </BrowserRouter>
     )
