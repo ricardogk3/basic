@@ -28,8 +28,7 @@
     "redux-firestore": "^1.0.0",
     "redux-thunk": "^2.4.2",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5",
-    "xlsx-style": "^0.8.13"
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
