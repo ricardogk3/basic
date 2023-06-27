@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
@@ -14,6 +15,11 @@ const Navbar = () => {
   const showSidebar = () => setSidebar(!sidebar);
   const { user } = useContext(userContext);
   const userDados = userProvider(user)
+  const dispatch = useDispatch(); // Obtenha a função de dispatch
+
+  const handleClick = () => {
+    dispatch()
+  };
 
   return (
     <>
@@ -41,7 +47,7 @@ const Navbar = () => {
               if (item.requireAdm === userAdm || userAdm) {
                 return (
                   <li key={index} className={item.cName}>
-                    <Link to={item.path}>
+                    <Link to={item.path} onClick={handleClick}>
                       {item.icon}
                       <span>{item.title}</span>
                     </Link>

@@ -3,6 +3,8 @@ import { userContext } from './components/UserContext';
 import Login from './pages/Login';
 import Principal from './pages/Principal'
 import './App.css';
+// Usar para criar o primeiro login
+// import Adm from './components/Adm';
 
 
 function App() {
@@ -16,21 +18,16 @@ function App() {
 
   const deslogado = async () => {
     setUser(null);
-    // setIsLogged(false);
   }
 
 
   return (
-    // <div className="App">
-    //   <header className="App-header">
     <div >
-      {/* <img src={logo} className="App-logo" alt="logo" /> */}
-
         <userContext.Provider value={{ logado, deslogado, user }}>
           {isLogged ? <Principal /> : <Login />}
+          {/* Usar para criar o primeiro login */}
+          {/* <Adm/> */}
         </userContext.Provider>
-
-
     </div>
   );
 }

@@ -39,12 +39,13 @@ import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBFiQGBZfHre2Kt5Kr5URpBBk6gVSQHgTk",
-  authDomain: "cashrk-20bc7.firebaseapp.com",
-  projectId: "cashrk-20bc7",
-  storageBucket: "cashrk-20bc7.appspot.com",
-  messagingSenderId: "15948754840",
-  appId: "1:15948754840:web:19585a84ae0537ef0c05ed"
+  apiKey: "AIzaSyD5GSjNj9i1cwbRsFYrTxoDIZpUfv7aFtc",
+  authDomain: "basic-5661a.firebaseapp.com",
+  projectId: "basic-5661a",
+  storageBucket: "basic-5661a.appspot.com",
+  messagingSenderId: "636248179423",
+  appId: "1:636248179423:web:3b63a84cb9bad5cd435f6a",
+  measurementId: "G-TXGKZPB1MX"
 };
 
 const app = initializeApp(firebaseConfig);

@@ -12,6 +12,13 @@ export const SidebarData = [
     requireAdm: false
   },
   {
+    title: 'Notas',
+    path: '/notes',
+    icon: <AiIcons.AiFillFileText />,
+    cName: 'nav-text',
+    requireAdm: false
+  },
+  {
     title: 'Área administrativa',
     path: '/adm',
     icon: <IoIcons.IoIosLock />,
