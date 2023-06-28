@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addDadoColecao, updateDadoColecao, addSubcollection, updateSubcollection } from '../../store/action';
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
