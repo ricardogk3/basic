@@ -44,10 +44,10 @@ export default function Login() {
                         } else {
                             auth.signOut();
                             deslogado();
-                            setLoading(false);
+                            // setLoading(false);
                         }
                     } else {
-                        setLoading(false);
+                        // setLoading(false);
                     }
                 }
             )
@@ -104,9 +104,9 @@ export default function Login() {
     }
 
     return (
-        <div className="Login" style={{ background: 'black', height: "100vh" }}>
-            <div className="Login1">
-                <div style={{ height: "50vh" }}>
+        <div className="Login" style={{ background: 'black', height: "100vh", display: "flex", alignItems: "center", justifyContent: "center"  }}>
+            <div className="Login1 center">
+                <div style={{ height: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <img src={logo1} alt="Logo Basic Login" style={{ height: "100%" }} />
                 </div>
                 <FormControl sx={{ background: '#999', padding: 1, borderRadius: 2 }}>
