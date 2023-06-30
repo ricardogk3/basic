@@ -3,7 +3,7 @@ import { auth, db } from '../firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { Typography, TextField, Button, Checkbox, FormControlLabel, Box, Container } from '@mui/material';
 import { userContext } from '../components/UserContext'
-import { userProvider } from '../components/crud/funcoes'
+import { UserProvider } from '../components/crud/funcoes'
 
 export default function Configuracoes() {
   const [state, setState] = useState({
@@ -13,7 +13,7 @@ export default function Configuracoes() {
     msg: ''
   });
   const { user } = useContext(userContext);
-  const userDados = userProvider(user)
+  const userDados = UserProvider(user)
 
   useEffect(() => {
     const fetchUserData = async () => {

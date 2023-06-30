@@ -6,10 +6,10 @@ import Card from './Card'
 import Button from '@mui/material/Button';
 import './style.css'
 import { Dots } from "react-activity";
-import { somaSubcolecao, contarDadosMesmoUID } from './funcoes';
+import { UserProvider, contarDadosMesmoUID } from './funcoes';
 import ExportToExcel from "./Excel";
 import { userContext } from '../UserContext'
-import { userProvider } from '../crud/funcoes'
+import SomaSubcolecao from './SomaSubcolecao'
 
 export default function Read(p) {
     const dispatch = useDispatch();
@@ -17,12 +17,12 @@ export default function Read(p) {
     const dadosColecao = useSelector((state) => state.reducer.dadosColecao);
     const [loading, setLoading] = useState(true);
     let soma = 0;
-    const userDados = userProvider(user)
+    const userDados = UserProvider(user)
 
     if (!!p.parametros.subcolecao) {
         p.parametros.input.map((v, i) => {
             if (v.tipo === 'subsoma') {
-                soma = somaSubcolecao(
+                soma = SomaSubcolecao(
                     v,
                     p.parametros.colecaoFirebase,
                     p.parametros.subcolecao.colecaoFirebase,

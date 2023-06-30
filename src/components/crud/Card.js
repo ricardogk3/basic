@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteDadoColecao, deleteSubcollection, getAllSubcollection } from "../../store/action";
 import ReadSubColection from './ReadSubColection';
 import './style.css'
-import { retornaUsuario } from '../crud/funcoes'
+import { RetornaUsuario } from '../crud/funcoes'
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -64,7 +64,7 @@ export default function RecipeReviewCard(b) {
                     {b.parametros.mostrarQuemCriou ?
                         <div style={{ flex: 4, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignSelf: 'center' }}>
                             <p className='pCardMostrarQuemCriou'>
-                                {retornaUsuario(b.dadoColecao.uid).name + " " + retornaUsuario(b.dadoColecao.uid).lastname}
+                                {RetornaUsuario(b.dadoColecao.uid).name + " " + RetornaUsuario(b.dadoColecao.uid).lastname}
                             </p>
                         </div>
                         : <></>}
