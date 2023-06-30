@@ -6,10 +6,11 @@ import Card from './Card'
 import Button from '@mui/material/Button';
 import './style.css'
 import { Dots } from "react-activity";
-import { somaSubcolecao, contarDadosMesmoUID } from './funcoes';
+import { contarDadosMesmoUID } from './funcoes';
 import ExportToExcel from "./Excel";
 import { userContext } from '../UserContext'
-import { userProvider } from '../crud/funcoes'
+import { UserProvider } from '../crud/funcoes'
+import SomaSubcolecao from "./SomaSubcolecao";
 
 export default function Read(p) {
     const dispatch = useDispatch();
@@ -17,12 +18,13 @@ export default function Read(p) {
     const dadosColecao = useSelector((state) => state.reducer.dadosColecao);
     const [loading, setLoading] = useState(true);
     let soma = 0;
-    const userDados = userProvider(user)
+    const userDados = UserProvider(user)
 
     if (!!p.parametros.subcolecao) {
         p.parametros.input.map((v, i) => {
             if (v.tipo === 'subsoma') {
-                soma = somaSubcolecao(
+                // console.log(v)
+                soma = SomaSubcolecao(
                     v,
                     p.parametros.colecaoFirebase,
                     p.parametros.subcolecao.colecaoFirebase,
@@ -172,7 +174,7 @@ export default function Read(p) {
                                             }, 0);
                                             return <p style={styles.c3} key={i}>Total: {sum.toFixed(2)}</p>
                                         } else if (v.tipo === 'number' && v.media) {
-                                            const quantidade = contarDadosMesmoUID(dadosColecao, userDados.uid, p.parametros.todosVeem);
+                                            const quantidade = contarDadosMesmoUID(dadosColecao, userDados?.uid, p.parametros.todosVeem);
                                             const sum = dadosColecao.reduce((accumulator, currentValue) => {
                                                 // Verificar se todosVeem é falso e se o UID é igual ao do usuário
                                                 if (!p.parametros.todosVeem && currentValue.uid === userDados.uid) {
@@ -187,7 +189,7 @@ export default function Read(p) {
                                         } else if (v.tipo === 'subsoma' && v.soma) {
                                             return <p style={styles.c3} key={i}>Total: {soma.toFixed(2)}</p>
                                         } else if (v.tipo === 'subsoma' && v.media) {
-                                            const quantidade = contarDadosMesmoUID(dadosColecao, userDados.uid, p.parametros.todosVeem);
+                                            const quantidade = contarDadosMesmoUID(dadosColecao, userDados?.uid, p.parametros.todosVeem);
                                             return <p style={styles.c3} key={i}>Média: {(soma / quantidade).toFixed(2)}</p>
 
                                         } else {

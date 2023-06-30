@@ -8,13 +8,13 @@ import { IconContext } from 'react-icons';
 import logo1 from "../images/logo1.png";
 import UserView from './UserView';
 import { userContext } from '../components/UserContext'
-import { userProvider } from '../components/crud/funcoes'
+import { UserProvider } from '../components/crud/funcoes'
 
 const Navbar = () => {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
   const { user } = useContext(userContext);
-  const userDados = userProvider(user)
+  const userDados = UserProvider(user)
   const dispatch = useDispatch(); // Obtenha a função de dispatch
 
   const handleClick = () => {
@@ -43,7 +43,7 @@ const Navbar = () => {
               </Link>
             </li>
             {SidebarData.map((item, index) => {
-              let userAdm = userDados.adm
+              let userAdm = userDados?.adm
               if (item.requireAdm === userAdm || userAdm) {
                 return (
                   <li key={index} className={item.cName}>

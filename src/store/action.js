@@ -55,6 +55,11 @@ export const getSubcollection = (collectionF, subcolecaoFirebase, originalId) =>
 
 
 export const getAllSubcollection = (collectionF, subcolecaoFirebase) => async (dispatch) => {
+  if (!collectionF || !subcolecaoFirebase) {
+    // Valores indefinidos: faça o tratamento adequado aqui
+    return 0; // Por exemplo, retorne um valor padrão ou lance um erro
+  }
+
   const q = query(collection(db, collectionF));
   const dadosColecao = await getDocs(q);
 

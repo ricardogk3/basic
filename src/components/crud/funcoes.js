@@ -1,77 +1,77 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllSubcollection } from "../../store/action";
+// import { useSelector, useDispatch } from 'react-redux';
+// import { getAllSubcollection } from "../../store/action";
 import { useEffect, useState } from 'react';
 import { onSnapshot, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
 
-export function somaSubcolecao(v, colecao, subcolecao, todosVeem, userDados) {
-    const dispatch = useDispatch();
-    const dadosColecao = useSelector((state) => state.reducer);
+// export function somaSubcolecao(v, colecao, subcolecao, todosVeem, userDados) {
+//     const dispatch = useDispatch();
+//     const dadosColecao = useSelector((state) => state.reducer);
 
-    useEffect(() => {
-        dispatch(getAllSubcollection(colecao, subcolecao))
+//     useEffect(() => {
+//         dispatch(getAllSubcollection(colecao, subcolecao))
 
-    }, [dispatch])
+//     }, [dispatch])
 
-    var soma = 0;
+//     var soma = 0;
 
-    Object.keys(dadosColecao.subcollection).map((key) => {
-        if (
-            Array.isArray(dadosColecao.subcollection[key]) &&
-            dadosColecao.subcollection[key].length > 0
-        ) {
-            return dadosColecao.subcollection[key].map((valorprasomar, i) => {
-                // Verificar se todosVeem é verdadeiro e se o uid da subcoleção é igual ao uid do usuário
-                if (!todosVeem && valorprasomar.uid === userDados.uid) {
-                    soma = soma + parseFloat(valorprasomar[v.formnome]);
-                } else if (todosVeem) {
-                    soma = soma + parseFloat(valorprasomar[v.formnome]);
-                }
-                return null;
-            });
-        }
-        return null;
-    });
-    return soma
-}
-
-
-export function userProvider(userr) {
-    const [userData, setUserData] = useState([]);
-
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
-            const users = snapshot.docs.map((doc) => doc.data());
-            // Assuming the user is already authenticated and their UID is available
-            const currentUser = users.find((user) => user.uid === userr.uid);
-
-            setUserData(currentUser);
-        });
-
-        return () => unsubscribe();
-    }, []);
-    return userData
-
-};
+//     Object.keys(dadosColecao.subcollection).map((key) => {
+//         if (
+//             Array.isArray(dadosColecao.subcollection[key]) &&
+//             dadosColecao.subcollection[key].length > 0
+//         ) {
+//             return dadosColecao.subcollection[key].map((valorprasomar, i) => {
+//                 // Verificar se todosVeem é verdadeiro e se o uid da subcoleção é igual ao uid do usuário
+//                 if (!todosVeem && valorprasomar.uid === userDados.uid) {
+//                     soma = soma + parseFloat(valorprasomar[v.formnome]);
+//                 } else if (todosVeem) {
+//                     soma = soma + parseFloat(valorprasomar[v.formnome]);
+//                 }
+//                 return null;
+//             });
+//         }
+//         return null;
+//     });
+//     return soma
+// }
 
 
-export function retornaUsuario(uid) {
-    const [userData, setUserData] = useState([]);
+// export function UserProvider(userr) {
+//     const [userData, setUserData] = useState([]);
 
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
-            const users = snapshot.docs.map((doc) => doc.data());
-            // Assuming the user is already authenticated and their UID is available
-            const currentUser = users.find((user) => user.uid === uid);
+//     useEffect(() => {
+//         const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
+//             const users = snapshot.docs.map((doc) => doc.data());
+//             // Assuming the user is already authenticated and their UID is available
+//             const currentUser = users.find((user) => user.uid === userr.uid);
 
-            setUserData(currentUser);
-        });
+//             setUserData(currentUser);
+//         });
 
-        return () => unsubscribe();
-    }, []);
-    return userData
+//         return () => unsubscribe();
+//     }, []);
+//     return userData
 
-};
+// };
+
+
+// export function RetornaUsuario(uid) {
+//     const [userData, setUserData] = useState([]);
+
+//     useEffect(() => {
+//         const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
+//             const users = snapshot.docs.map((doc) => doc.data());
+//             // Assuming the user is already authenticated and their UID is available
+//             const currentUser = users.find((user) => user.uid === uid);
+
+//             setUserData(currentUser);
+//         });
+
+//         return () => unsubscribe();
+//     }, []);
+//     return userData
+
+// };
 
 export function contarDadosMesmoUID(dadosColecao, userUID, todosVeem) {
     let quantidade = 0;
@@ -88,3 +88,39 @@ export function contarDadosMesmoUID(dadosColecao, userUID, todosVeem) {
     return quantidade || 1; // Verifica se a quantidade é zero e retorna 1 caso seja
 }
 
+export function UserProvider(userr) {
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
+            const users = snapshot.docs.map((doc) => doc.data());
+            // Assuming the user is already authenticated and their UID is available
+            // const currentUser = users.find((user) => user.uid === userr.uid);
+            const currentUser = users.find((user) => user.uid === userr?.uid);
+
+            setUserData(currentUser);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return userData;
+}
+
+export function RetornaUsuario(uid) {
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
+            const users = snapshot.docs.map((doc) => doc.data());
+            // Assuming the user is already authenticated and their UID is available
+            const currentUser = users.find((user) => user.uid === uid);
+
+            setUserData(currentUser);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return userData;
+}

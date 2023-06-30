@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import { userContext } from '../components/UserContext';
-import { userProvider } from '../components/crud/funcoes'
+import { UserProvider } from '../components/crud/funcoes'
 
 import Adm from '../components/Adm'
 import Configuracoes from '../components/Configuracoes';
@@ -11,7 +11,7 @@ import Read from '../components/crud/Read';
 
 export default function Principal() {
     const { user } = useContext(userContext);
-    const userDados = userProvider(user)
+    const userDados = UserProvider(user)
     const parametros = {
         titulo: 'Arquivos Gerais',
         colecaoFirebase: 'AGerais',
@@ -196,7 +196,7 @@ export default function Principal() {
                         parametros={parametros2}
                     />
                 } path="/notes" exact />
-                <Route element={userDados.adm ? <Adm /> : <PaginaInvalida />} path="/adm" exact />
+                <Route element={userDados?.adm ? <Adm /> : <PaginaInvalida />} path="/adm" exact />
                 <Route element={<Configuracoes />} path="/configuracoes" exact />
                 <Route element={<PaginaInvalida />} path="*" />
             </Routes>
