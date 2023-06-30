@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addDadoColecao, updateDadoColecao, addSubcollection, updateSubcollection } from '../../store/action';
-import { TextField } from '@material-ui/core';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 export const CreateAndEdit = ({
