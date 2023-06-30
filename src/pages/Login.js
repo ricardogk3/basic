@@ -20,7 +20,7 @@ import logo1 from '../images/logo1.png'
 export default function Login() {
     const { logado, deslogado } = useContext(userContext);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [state, setState] = useState({
         email: '',

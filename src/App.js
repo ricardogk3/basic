@@ -5,7 +5,7 @@ import Principal from './pages/Principal'
 import './App.css';
 // Usar para criar o primeiro login
 // import Adm from './components/Adm';
-
+// git push --force origin main
 
 function App() {
   const [isLogged, setIsLogged] = useState(false);
